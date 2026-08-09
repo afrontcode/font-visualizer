@@ -236,6 +236,9 @@ function getCard(family) {
     card = buildCard(family);
     cardCache.set(family.name, card);
   }
+  // Sincroniza el texto de muestra: las tarjetas cacheadas fuera del DOM no
+  // reciben las actualizaciones en vivo, así que las igualamos en cada render.
+  card.querySelector('.card-preview').textContent = state.sampleText;
   return card;
 }
 
