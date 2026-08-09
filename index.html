@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visor de fuentes locales</title>
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <header class="topbar">
+    <h1>Visor de fuentes <span>· locales</span></h1>
+    <input id="search" type="search" placeholder="Buscar por familia…" disabled autocomplete="off">
+    <div class="count" id="global-count"></div>
+  </header>
+
+  <!-- Barra de herramientas -->
+  <div class="toolbar hidden" id="toolbar">
+    <label>Texto de muestra
+      <input id="sample-text" type="text" placeholder="El veloz murciélago hindú…" autocomplete="off">
+    </label>
+    <label>Tamaño
+      <input id="size-slider" type="range" min="12" max="96" value="36" step="1">
+      <span id="size-value">36 px</span>
+    </label>
+    <label>Orden
+      <select id="sort-select">
+        <option value="az">A–Z</option>
+        <option value="za">Z–A</option>
+      </select>
+    </label>
+    <div class="view-toggle" role="group" aria-label="Vista">
+      <button id="view-grid" aria-pressed="true" title="Vista de grilla">Grilla</button>
+      <button id="view-list" aria-pressed="false" title="Vista de lista">Lista</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar hidden" id="sidebar">
+      <h2>Colección</h2>
+      <div id="collection-filters"></div>
+      <h2>Categorías</h2>
+      <p class="note">Inferidas por el nombre de la familia; son aproximadas.</p>
+      <div id="category-filters"></div>
+    </aside>
+
+    <!-- Área principal -->
+    <main id="main">
+      <!-- Estado inicial -->
+      <div class="center-state" id="empty-state">
+        <div class="icon">🔤</div>
+        <h2>Explorá las fuentes de tu equipo</h2>
+        <p>Al continuar, el navegador va a pedirte permiso para acceder a las fuentes instaladas en tu sistema. No se envía nada a ningún servidor.</p>
+        <button class="primary-btn" id="load-btn">Cargar mis fuentes</button>
+      </div>
+
+      <!-- Navegador no soportado -->
+      <div class="center-state hidden" id="unsupported-state">
+        <div class="icon">🚫</div>
+        <h2>Navegador no soportado</h2>
+        <p>Este navegador no expone la Local Font Access API. Abrí este archivo en <strong>Chrome</strong> o <strong>Edge</strong> de escritorio para usar la aplicación.</p>
+      </div>
+
+      <!-- Cargando -->
+      <div class="center-state hidden" id="loading-state">
+        <div class="spinner"></div>
+        <h2>Consultando fuentes…</h2>
+        <p>Leyendo y agrupando las familias instaladas.</p>
+      </div>
+
+      <!-- Error -->
+      <div class="center-state hidden" id="error-state">
+        <div class="icon">⚠️</div>
+        <h2 id="error-title">No se pudo acceder a las fuentes</h2>
+        <p class="error-detail" id="error-message"></p>
+        <button class="primary-btn" id="retry-btn">Reintentar</button>
+      </div>
+
+      <!-- Resultados -->
+      <div class="grid hidden" id="grid"></div>
+      <p class="no-results hidden" id="no-results">No se encontraron familias que coincidan con los filtros.</p>
+    </main>
+  </div>
+
+  <!-- Panel de detalle -->
+  <div class="panel-backdrop" id="panel-backdrop"></div>
+  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panel-title">
+    <div class="panel-header">
+      <h2 id="panel-title"></h2>
+      <button class="close-btn" id="panel-close" title="Cerrar" aria-label="Cerrar panel">✕</button>
+    </div>
+    <div class="panel-body">
+      <section>
+        <h3>Previsualización</h3>
+        <div id="panel-preview"></div>
+      </section>
+      <section>
+        <h3>Estilos</h3>
+        <div id="panel-styles"></div>
+      </section>
+      <section>
+        <h3>Glifos</h3>
+        <div id="panel-glyphs">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789 ÁÉÍÓÚÑÜ áéíóúñü ¡!¿?.,;:·—–_()[]{}«»“”‘’ @#$%&amp;/\*+-=&lt;&gt;|~^°</div>
+      </section>
+      <section>
+        <h3>Metadata</h3>
+        <table class="meta-table">
+          <tr><td>Familia</td><td id="meta-family"></td></tr>
+          <tr><td>Nombre PostScript</td><td id="meta-postscript"></td></tr>
+          <tr><td>Estilo</td><td id="meta-style"></td></tr>
+          <tr><td>Cantidad de estilos</td><td id="meta-count"></td></tr>
+          <tr><td>Categoría (aprox.)</td><td id="meta-category"></td></tr>
+        </table>
+      </section>
+    </div>
+  </div>
+
+</body>
+</html>
